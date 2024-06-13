@@ -4,25 +4,23 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
 
+    public final Pattern DATA_PATTERN = Pattern.compile("\\d{2}\\.\\d{2}");
 
-    private static Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}");
-
-    private static String getDateFromString(String stringDate) throws Exception {
-        Matcher matcher = pattern.matcher(stringDate);
+    private String getDateFromString(String stringDate) throws Exception {
+        Matcher matcher = DATA_PATTERN.matcher(stringDate);
         if (matcher.find()) {
             return matcher.group();
         }
         throw new Exception("Не нашёл дату");
     }
 
-    private static int printPartValues(Elements values, int index) {
+    private int printPartValues(Elements values, int index) {
         int iterationCount = 4;
         if (index == 0) {
             Element valueLn = values.get(3);
@@ -39,7 +37,7 @@ public class Parser {
                 iterationCount = 3;
             }
         }
-        for (int i = 0; i < iterationCount; ++i) {
+        for (int i = 0; i < iterationCount; i++) {
             Element valueLine = values.get(index + i);
             for (Element td : valueLine.select("td")) {
                 System.out.print(td.text() + " ");
@@ -49,13 +47,13 @@ public class Parser {
         return iterationCount;
     }
 
-    private static Document getPage() throws IOException {
-        String url = "https://pogoda.spb.ru/";
-        Document page = Jsoup.parse(new URL(url), 3000);
+    private Document getPage() throws IOException {
+        final String SITE_URL = "https://pogoda.spb.ru/";
+        Document page = Jsoup.parse(new URL(SITE_URL), 3000);
         return page;
     }
 
-    public static void main(String[] args) throws Exception {
+    public void init() throws Exception {
         Document page = getPage();
         Element tableWth = page.select("table[class=wt]").first();
         Elements names = tableWth.select("tr[class=wth]");
