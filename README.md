@@ -1,1 +1,2 @@
-# simple-java-parser
+# Простой парсер на java
+Для парсинга использовался вот этот сайт: https://pogoda.spb.ru/
